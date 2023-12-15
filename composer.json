@@ -1,0 +1,16 @@
+{
+    "name": "kurnosov/phplab3",
+    "description": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "type": "prject",
+    "license": "apache",
+    "minimum-stability": "beta",
+
+    "autoload": {
+        "psr-4": {
+            "Kurnosov\\PhpProject\\LabThree": "src/"
+        }
+    },
+    "require": {
+        "fakerphp/faker": "^1.23"
+    }
+}
