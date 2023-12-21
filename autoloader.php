@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
+
 const linux_os_name = "linux";
 const macos_os_name = "macos";
 const windows_os_name = "windows";

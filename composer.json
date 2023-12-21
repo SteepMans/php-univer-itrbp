@@ -7,10 +7,26 @@
 
     "autoload": {
         "psr-4": {
-            "Kurnosov\\PhpProject\\LabThree": "src/"
+            "Kurnsoov\\LabThree\\": "src/",
+            "Kurnsoov\\Tests\\": "tests/"
         }
     },
+
+    "autoload-dev": {
+        "psr-4": {
+            "LabThree\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+
     "require": {
         "fakerphp/faker": "^1.23"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "10"
+    },
+    "scripts": {
+        "test": "phpunit tests --testdox --colors",
+        "test:coverage": "php -dxdebug.mode=coverage vendor/bin/phpunit tests --coverage-html coverage_report --coverage-filter src"
     }
 }
