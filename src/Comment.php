@@ -1,6 +1,13 @@
 <?php
+namespace src;
+
 class Comment
 {
+	public string $id;
+	public string $author_id;
+	public string $article_id;
+	public string $text;
+
 	public function __construct(
 		string $id = '',
 		string $author_id = '',
@@ -12,8 +19,8 @@ class Comment
 		$this->article_id = $article_id;
 		$this->text = $text;
 	}
-	public string $id;
-	public string $author_id;
-	public string $article_id;
-	public string $text;
+
+	public function __toString() {
+        return "UUID: {$this->id}, Author ID: {$this->author_id}, Article ID: {$this->article_id}, Content: {$this->text}";
+    }
 }

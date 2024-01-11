@@ -1,5 +1,6 @@
 <?php
-
+namespace src\Interfaces;
+use src\Comment;
 
 interface RepositoryCommentsInterface
 {

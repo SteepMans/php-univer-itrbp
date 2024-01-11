@@ -1,5 +1,7 @@
 <?php
-class DataBase extends SQLite3
+namespace src\Core;
+
+class DataBase extends \SQLite3
 {
 	function __construct($file)
 	{

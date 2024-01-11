@@ -2,14 +2,14 @@
 
 namespace Tests\Repositories;
 
-use Lab\Db;
-use Lab\Entities\Comment;
-use Lab\Exceptions\CommentNotFoundException;
-use Lab\Repositories\CommentsRepository;
+use src\Core\DataBase;
+use src\Comment;
+use src\Repositories\CommentsRepository;
 use PHPUnit\Framework\TestCase;
+use src\Exceptions\NotFoundException;
 use SQLite3Result;
 use SQLite3Stmt;
-use Tests\DummyLogger;
+use Tests\LoggerMock;
 
 use function PHPUnit\Framework\assertEquals;
 
@@ -17,14 +17,14 @@ final class SQLiteCommentRepositoryTest extends TestCase
 {
 	public function testSave()
 	{
-		$connectionStub = $this->createStub(Db::class);
+		$connectionStub = $this->createStub(DataBase::class);
 		$statementMock = $this->createMock(SQLite3Stmt::class);
 
 		$statementMock->expects($this->once())->method('execute')->with();
 
 		$connectionStub->method('prepare')->WillReturn($statementMock);
 
-		$repository = new CommentsRepository($connectionStub, new DummyLogger);
+		$repository = new CommentsRepository($connectionStub, new LoggerMock);
 
 		$comment = new Comment('111', '222', '333', 'text');
 		$repository->save($comment);
@@ -32,7 +32,7 @@ final class SQLiteCommentRepositoryTest extends TestCase
 
 	public function testGetById()
 	{
-		$connectionStub = $this->createStub(Db::class);
+		$connectionStub = $this->createStub(DataBase::class);
 		$statementMock = $this->createMock(SQLite3Stmt::class);
 
 
@@ -51,7 +51,7 @@ final class SQLiteCommentRepositoryTest extends TestCase
 
 		$connectionStub->method('prepare')->WillReturn($statementMock);
 
-		$repository = new CommentsRepository($connectionStub, new DummyLogger);
+		$repository = new CommentsRepository($connectionStub, new LoggerMock);
 
 		$comment = new Comment('111', '222', '333', 'text');
 
@@ -62,7 +62,7 @@ final class SQLiteCommentRepositoryTest extends TestCase
 
 	public function testGetByIdThrowsExceptionIfNotFound()
 	{
-		$connectionStub = $this->createStub(Db::class);
+		$connectionStub = $this->createStub(DataBase::class);
 		$statementStub = $this->createStub(SQLite3Stmt::class);
 
 
@@ -70,9 +70,9 @@ final class SQLiteCommentRepositoryTest extends TestCase
 
 		$connectionStub->method('prepare')->willReturn($statementStub);
 
-		$repository = new CommentsRepository($connectionStub, new DummyLogger);
+		$repository = new CommentsRepository($connectionStub, new LoggerMock);
 
-		$this->expectException(CommentNotFoundException::class);
+		$this->expectException(NotFoundException::class);
 
 		$uuid = "111";
 		$repository->get($uuid);

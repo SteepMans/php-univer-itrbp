@@ -1,4 +1,10 @@
 <?php
+namespace src\Repositories;
+
+use src\Core\DataBase;
+use src\Comment;
+use src\Interfaces\RepositoryCommentsInterface;
+
 include_once "../Core/DataBase.php";
 include_once "../Interfaces/RepositoryArticleInterface.php";
 include_once "../Article.php";

@@ -1,7 +1,11 @@
 <?php
+namespace src\Repositories;
+
 include_once "../Core/DataBase.php";
-use Article;
-use RepositoryArticleInterface;
+use \src\Article;
+use \src\Interfaces\RepositoryArticleInterface;
+use \src\Core\DataBase;
+use \src\Exceptions\EntityNotFoundException;
 
 class ArticlesRepository implements RepositoryArticleInterface
 {
@@ -35,5 +39,15 @@ class ArticlesRepository implements RepositoryArticleInterface
 
 		$this->db->exec($query);
 		return $article;
+	}
+
+	public function delete(string $uuid)
+	{
+		$query = $this->db->prepare('DELETE FROM articles WHERE uuid=:uuid');
+		$query->bindValue(':uuid', $uuid);
+		$result = $query->execute();
+		if ($result === false) {
+			throw new EntityNotFoundException();
+		}
 	}
 }

@@ -2,16 +2,18 @@
 
 namespace Tests\Repositories;
 
-use Kurnsoov\LabThree\DataBase;
-use Kurnsoov\LabThree\Entities\Article;
-use Kurnsoov\LabThree\Exceptions\ArticleNotFoundException;
-use Kurnsoov\LabThree\Repositories\ArticlesRepository;
+use src\Core\DataBase;
+use src\Article;
+use src\Repositories\ArticlesRepository;
 use PHPUnit\Framework\TestCase;
+use src\Exceptions\NotFoundException;
 use SQLite3Result;
 use SQLite3Stmt;
-use Tests\DummyLogger;
+use Tests\LoggerMock;
 
 use function PHPUnit\Framework\assertEquals;
+
+include "autoloader.php";
 
 final class SQLiteArticleRepositoryTest extends TestCase
 {
@@ -20,20 +22,15 @@ final class SQLiteArticleRepositoryTest extends TestCase
 		$connectionStub = $this->createStub(DataBase::class);
 		$statementMock = $this->createMock(SQLite3Stmt::class);
 
-		// $statementMock->expects($this->once())->method('bindValue')->with(':text', '321');
-		// $statementMock->expects($this->once())->method('bindValue')->with(':text', 'title');
-		// $statementMock->expects($this->once())->method('bindValue')->with(':text', '123');
-		// $statementMock->expects($this->once())->method('bindValue')->with(':text', 'text');
-
+		var_dump($statementMock->expects($this->once())->method('execute'));
+		return;
 
 		$statementMock->expects($this->once())->method('execute')->with();
 
 		$connectionStub->method('prepare')->WillReturn($statementMock);
 
-		$repository = new ArticlesRepository($connectionStub, new DummyLogger);
-
-
-		$article = new Article('123', '321', 'title', 'text');
+		$repository = new ArticlesRepository($connectionStub, new LoggerMock);
+		$article = new Article('111', '111', '111', '111');
 		$repository->save($article);
 	}
 
@@ -41,48 +38,43 @@ final class SQLiteArticleRepositoryTest extends TestCase
 	{
 		$connectionStub = $this->createStub(DataBase::class);
 		$statementMock = $this->createMock(SQLite3Stmt::class);
-
 		$sqlResultMock = $this->createMock(SQLite3Result::class);
 
-		// $statementMock->expects($this->once())->method('bindValue')->with(':uuid', '321');
 		$statementMock->expects($this->once())->method('execute')->WillReturn($sqlResultMock);
 
 		$sqlResultMock->expects($this->once())
 			->method('fetchArray')->with(SQLITE3_ASSOC)->WillReturn(
 				[
-					'uuid' => '321',
-					'text' => 'text',
-					'title' => 'title',
-					'author_uuid' => '123'
+					'uuid' => '111',
+					'text' => '111',
+					'title' => '111',
+					'author_uuid' => '111'
 				]
 			);
 
-
 		$connectionStub->method('prepare')->WillReturn($statementMock);
 
-		$repository = new ArticlesRepository($connectionStub, new DummyLogger);
+		$repository = new ArticlesRepository($connectionStub, new LoggerMock);
+		$article = new Article('111', '111', '111', '111');
 
-		$article = new Article('321', '123', 'title', 'text');
-
-		$result = $repository->get('321');
+		$result = $repository->get('111');
 
 		assertEquals($article, $result);
 	}
 
 	public function testGetByIdThrowsExceptionIfNotFound()
 	{
-		$connectionStub = $this->createStub(Db::class);
+		$connectionStub = $this->createStub(DataBase::class);
 		$statementStub = $this->createStub(SQLite3Stmt::class);
 
 		$statementStub->method('execute')->willReturn(false);
-
 		$connectionStub->method('prepare')->willReturn($statementStub);
 
-		$repository = new ArticlesRepository($connectionStub, new DummyLogger);
+		$repository = new ArticlesRepository($connectionStub, new LoggerMock);
 
-		$this->expectException(ArticleNotFoundException::class);
+		$this->expectException(NotFoundException::class);
 
-		$uuid = "123123";
+		$uuid = "111";
 		$repository->get($uuid);
 	}
 }
